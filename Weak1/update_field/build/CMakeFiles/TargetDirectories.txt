@@ -1,0 +1,3 @@
+/home/figoro/programming/study/cursera-red/Weak1/update_field/build/CMakeFiles/rebuild_cache.dir
+/home/figoro/programming/study/cursera-red/Weak1/update_field/build/CMakeFiles/comparator_generator.dir
+/home/figoro/programming/study/cursera-red/Weak1/update_field/build/CMakeFiles/edit_cache.dir

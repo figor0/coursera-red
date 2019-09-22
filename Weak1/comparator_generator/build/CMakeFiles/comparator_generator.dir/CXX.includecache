@@ -1,0 +1,40 @@
+#IncludeRegexLine: ^[ 	]*[#%][ 	]*(include|import)[ 	]*[<"]([^">]+)([">])
+
+#IncludeRegexScan: ^.*$
+
+#IncludeRegexComplain: ^$
+
+#IncludeRegexTransform: 
+
+/home/figoro/programming/study/cursera-red/Weak1/comparator_generator/airline_ticket.h
+string
+-
+iostream
+-
+
+/home/figoro/programming/study/cursera-red/Weak1/comparator_generator/sort_by.cpp
+airline_ticket.h
+/home/figoro/programming/study/cursera-red/Weak1/comparator_generator/airline_ticket.h
+test_runner.h
+/home/figoro/programming/study/cursera-red/Weak1/comparator_generator/test_runner.h
+algorithm
+-
+numeric
+-
+
+/home/figoro/programming/study/cursera-red/Weak1/comparator_generator/test_runner.h
+sstream
+-
+stdexcept
+-
+iostream
+-
+map
+-
+set
+-
+string
+-
+vector
+-
+
