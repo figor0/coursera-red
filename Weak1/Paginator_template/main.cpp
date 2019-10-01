@@ -7,6 +7,7 @@
 using namespace std;
 
 // Реализуйте шаблон класса Paginator
+#define PRINT_NAME(os, value) os << #value << endl
 
 template <typename Iterator>
 class Page{
@@ -19,7 +20,10 @@ public:
 	Iterator begin() { return _begin; }
 	Iterator end() { return _end; }
 
-	size_t size() const { return _size; }
+	size_t size() const
+	{
+		return _size;
+	}
 private:
 	Iterator _begin, _end;
 	size_t _size;
@@ -37,20 +41,20 @@ public:
 		long page_number = divide > 0 ? duration/_page_size + 1 : duration/_page_size;
 		pages.reserve(static_cast<size_t>(page_number));
 		for ( long i = 0; i < page_number; i++){
-			if ( i < page_number - 1){
+			if ( i < page_number - 1 ){
 				Iterator tmp_end = begin  + _page_size;
 				pages.push_back(Page<Iterator>(begin, tmp_end));
 				begin += _page_size;
 			} else{
-				Iterator tmp_end = begin + divide;
-				pages.push_back(Page<Iterator>(begin, tmp_end));
+				Iterator tmp_end = divide == 0 ? begin + _page_size : begin + divide;
+				pages.push_back( Page<Iterator>( begin, tmp_end ) );
 			}
 		}
 	}
-	typename vector<Page<Iterator>>::const_iterator begin() const { return pages.end(); }
-	typename vector<Page<Iterator>>::const_iterator end() const { return pages.begin(); }
-	typename vector<Page<Iterator>>::iterator begin() { return pages.end(); }
-	typename vector<Page<Iterator>>::iterator end() { return pages.begin(); }
+	typename vector<Page<Iterator>>::const_iterator begin() const { return pages.begin(); }
+	typename vector<Page<Iterator>>::const_iterator end() const { return pages.end(); }
+	typename vector<Page<Iterator>>::iterator begin() { return pages.begin(); }
+	typename vector<Page<Iterator>>::iterator end() { return pages.end(); }
 	size_t size() const { return pages.size(); }
 private:
 	vector<Page<Iterator>> pages;
@@ -63,8 +67,8 @@ auto Paginate(C& c, size_t page_size) {
 }
 
 void TestPageCounts() {
-  vector<int> v(15);
-
+	vector<int> v(15);
+	PRINT_NAME( cout , TestPageCounts);
   ASSERT_EQUAL(Paginate(v, 1).size(), v.size());
   ASSERT_EQUAL(Paginate(v, 3).size(), 5u);
   ASSERT_EQUAL(Paginate(v, 5).size(), 3u);
@@ -76,18 +80,19 @@ void TestPageCounts() {
 
 void TestLooping() {
   vector<int> v(15);
-  iota(begin(v), end(v), 1);
-
+	iota(begin(v), end(v), 1);
+	string right("1 2 3 4 5 6 \n7 8 9 10 11 12 \n13 14 15 \n");
   Paginator<vector<int>::iterator> paginate_v(v.begin(), v.end(), 6);
   ostringstream os;
   for (const auto& page : paginate_v) {
 	for (int x : page) {
-	  os << x << ' ';
+		os << x << " ";
 	}
 	os << '\n';
-  }
-
-  ASSERT_EQUAL(os.str(), "1 2 3 4 5 6 \n7 8 9 10 11 12 \n13 14 15 \n");
+	}
+	cout << os.str() << endl;
+	ASSERT_EQUAL(os.str().size(), right.size());
+	ASSERT_EQUAL(os.str(), right);
 }
 
 void TestModification() {
@@ -154,17 +159,13 @@ void TestPagePagination() {
 }
 
 int main() {
-//	vector<int> v{1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20};
-//	for (auto value: Paginator<vector<int>::iterator>(v.begin(), v.end(), 5)){
-//		cout << value << endl;
-//	}
   TestRunner tr;
-  RUN_TEST(tr, TestPageCounts);
-  RUN_TEST(tr, TestLooping);
-  RUN_TEST(tr, TestModification);
-  RUN_TEST(tr, TestPageSizes);
-  RUN_TEST(tr, TestConstContainer);
-  RUN_TEST(tr, TestPagePagination);
+	RUN_TEST(tr, TestPageCounts);
+	RUN_TEST(tr, TestLooping);
+	RUN_TEST(tr, TestModification);
+	RUN_TEST(tr, TestPageSizes);
+	RUN_TEST(tr, TestConstContainer);
+	RUN_TEST(tr, TestPagePagination);
 	return 0;
 }
 
